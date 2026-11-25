@@ -33,7 +33,21 @@ Reclassify both resulting issues and update their dependencies.
 ## Explore
 
 - [Full documentation](docs/bakai.md)
-- [Bagraph interactive visualization source](docs/bagraph.html) — open locally in a browser or via GitHub Pages; GitHub's file preview does not execute HTML.
+- [Bagraph interactive visualization source](docs/bagraph.html) — open via [GitHub Pages](https://abalbastrem.github.io/bakai/bagraph.html) or a local HTTP server; GitHub's file preview does not execute HTML.
 - [Presentation page](docs/index.html)
+
+## Bagraph data sources
+
+- [Issues](docs/data/issues.md): edit the Markdown table (ID, Title, Impact, Ease).
+- [Dependencies](docs/data/dependencies.md): edit the Mermaid graph; an arrow points from prerequisite to dependent.
+- [Bagraph JavaScript](docs/bagraph.js): computes Independence, octant, downstream count and Unlocking Power, then renders the plot and issue table.
+
+Only unresolved issues and unresolved dependencies belong in this dataset. Do not duplicate derived values in the source files. Bagraph validates scores, unique IDs, graph references, duplicate edges and cycles. A shared downstream issue is counted once per ancestor. Unlocking Power measures potential downstream impact, not guaranteed immediate unblocking.
+
+Use one pipe-delimited row per issue (no literal pipes inside titles) and one `ID --> ID` edge per line in a single Mermaid graph block. Isolated issues need no graph entry. Reload Bagraph after changing the files.
+
+For local use, run `python -m http.server 8000 --directory docs` from the repository root and visit `http://localhost:8000/bagraph.html`. Opening the HTML directly with `file://` will not work because it fetches Markdown over HTTP. Plotly is loaded from a CDN and requires internet access.
+
+The SVG is a static snapshot of the original fictional dataset; it is not regenerated automatically. Bagraph reads the current Markdown data dynamically.
 
 The visualizations use fictional software issues. Bakai is a proposed practical framework inspired by eight-element symbolism, not a traditional Bagua system. This is an early version.
