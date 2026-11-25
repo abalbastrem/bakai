@@ -2,7 +2,7 @@
 
 ![Bakai octants](./bakai.svg)
 
-[Interactive Plotly 3D chart](./bakai-plotly.html)
+[Interactive Plotly 3D chart](./bagraph.html)
 
 ## Axes
 - Impact
