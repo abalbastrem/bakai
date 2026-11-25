@@ -2,7 +2,7 @@
 
 ![Bakai octants](./bakai.svg)
 
-[Interactive Plotly 3D chart](./bagraph.html)
+[Bagraph — interactive 3D visualization](./bagraph.html)
 
 ## Axes
 - Impact
@@ -12,7 +12,7 @@
 ## Point semantics in the interactive chart
 - **Circle**: issue that does **not** unlock downstream issues.
 - **Diamond**: issue that **does** unlock downstream issues.
-- **Marker size**: proportional to **Unlocking Power**.
+- **Marker size**: increases with **Unlocking Power**, with a capped display size in Bagraph.
 
 ## Notes
 - Bit order and trigram order: top = Impact, middle = Ease, bottom = Independence.
@@ -22,6 +22,14 @@
 
 - Plot geometry: integer scores 1–10, displayed from 0.5 to 10.5; split at 5.5 for equal octants.
 - Mountain: `#874018`; Earth: `#c26d1f`.
+
+## Bagraph reference implementation
+
+The two sources of truth for the example dataset are [issues.md](./data/issues.md) and [dependencies.md](./data/dependencies.md). Issues specify Impact and Ease on the integer scale 1–10. The Mermaid graph uses arrows from unresolved prerequisites to their dependents. Independence is derived from the absence of incoming edges.
+
+Unlocking Power is the sum of the Impact scores of all distinct reachable downstream issues, including indirect descendants. This is a potential benefit rather than a guarantee that completing one prerequisite will immediately unblock every descendant. The dependency graph must be acyclic.
+
+Bagraph computes these metrics and the octant from the Markdown data at page load. The issue table and point markers are generated from the same computed records. The static SVG illustrates the original dataset only.
 
 ## Containment Splitting
 
