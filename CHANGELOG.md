@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 — 2026-11-25
+
+- Rename the interactive visualization to `bagraph.html` and update references.
+
 ## 0.1.0 — 2026-11-25
 
 - Initial theoretical specification of Bakai and its eight categories.
