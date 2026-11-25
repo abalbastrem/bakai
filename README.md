@@ -33,7 +33,7 @@ Reclassify both resulting issues and update their dependencies.
 ## Explore
 
 - [Full documentation](docs/bakai.md)
-- [Bagraph interactive visualization source](docs/bakai-plotly.html) — open locally in a browser or via GitHub Pages; GitHub's file preview does not execute HTML.
+- [Bagraph interactive visualization source](docs/bagraph.html) — open locally in a browser or via GitHub Pages; GitHub's file preview does not execute HTML.
 - [Presentation page](docs/index.html)
 
 The visualizations use fictional software issues. Bakai is a proposed practical framework inspired by eight-element symbolism, not a traditional Bagua system. This is an early version.
