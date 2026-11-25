@@ -35,6 +35,7 @@
 <div class="wrap">
   <h1>Bagraph · Bakai</h1>
   <p class="sub">Axes: <strong>Impact</strong>, <strong>Ease</strong>, <strong>Independence</strong>. Octant volumes are intentionally very transparent, with stronger edges, so the issue points remain readable.</p>
+  <p id="data-status" role="status">Loading issue data…</p>
   <div class="grid">
     <div class="panel"><div id="plot"></div></div>
     <div class="panel"><div class="panel-inner">
@@ -43,7 +44,7 @@
       <div class="pill">Ease = 11 − Cost</div>
       <div class="pill">Independent = no unresolved prerequisites</div>
       <div class="section-title">Categories · color legend</div>
-      <div class="legend-item"><span class="swatch" style="background:#EAF6FF; border-color:#93C5FD;"></span><div><strong>Heaven · Major Wins</strong> <span class="small">(111)</span><br><span class="small">High impact · easy · independent</span></div></div><div class="legend-item"><span class="swatch" style="background:#DC2626; border-color:#991B1B;"></span><div><strong>Fire · Major Fixes</strong> <span class="small">(101)</span><br><span class="small">High impact · not easy · independent</span></div></div><div class="legend-item"><span class="swatch" style="background:#FFF200; border-color:#D4B000;"></span><div><strong>Lightning · Quick Fixes</strong> <span class="small">(011)</span><br><span class="small">Low impact · easy · independent</span></div></div><div class="legend-item"><span class="swatch" style="background:#9CA3AF; border-color:#6B7280;"></span><div><strong>Air · Hollow Fixes</strong> <span class="small">(001)</span><br><span class="small">Low impact · not easy · independent</span></div></div><div class="legend-item"><span class="swatch" style="background:#06B6D4; border-color:#0E7490;"></span><div><strong>Water · Locked Wins</strong> <span class="small">(110)</span><br><span class="small">High impact · easy · dependent</span></div></div><div class="legend-item"><span class="swatch" style="background:#874018; border-color:#663011;"></span><div><strong>Mountain · Distant Peaks</strong> <span class="small">(100)</span><br><span class="small">High impact · not easy · dependent</span></div></div><div class="legend-item"><span class="swatch" style="background:#C26D1F; border-color:#92400E;"></span><div><strong>Earth · Deferred Polish</strong> <span class="small">(010)</span><br><span class="small">Low impact · easy · dependent</span></div></div><div class="legend-item"><span class="swatch" style="background:#567A37; border-color:#3F5B2A;"></span><div><strong>Swamp · Quagmires</strong> <span class="small">(000)</span><br><span class="small">Low impact · not easy · dependent</span></div></div>
+      <div id="category-legend"></div>
       <div class="section-title">Point semantics</div>
       <div class="legend-item"><span class="point-icon"><svg width="18" height="18" aria-hidden="true"><circle cx="9" cy="9" r="5.5" fill="#ffffff" stroke="#111827" stroke-width="1.6" /></svg></span><div><strong>Circle</strong><br><span class="small">Issue with no downstream issues unlocked.</span></div></div>
       <div class="legend-item"><span class="point-icon"><svg width="18" height="18" aria-hidden="true"><polygon points="9,1.5 16.5,9 9,16.5 1.5,9" fill="#ffffff" stroke="#111827" stroke-width="1.6" /></svg></span><div><strong>Diamond</strong><br><span class="small">Issue that unlocks one or more downstream issues.</span></div></div>
@@ -57,98 +58,14 @@
     </div></div>
   </div>
   <div class="panel" style="margin-top:20px;"><div class="panel-inner">
-    <h3 style="margin:0 0 10px;">Issues in this prototype</h3>
+    <h3 style="margin:0 0 10px;">Issues</h3>
     <table>
       <thead><tr><th>ID</th><th>Issue</th><th>Octant</th><th>Impact</th><th>Ease</th><th>Independent</th><th>Unlocks</th></tr></thead>
-      <tbody><tr><td><strong>BUG-01</strong></td><td>Missing auth check<div class="small">depends on: —</div></td><td>Heaven · Major Wins<div class="small">111</div></td><td>10</td><td>9</td><td>yes</td><td>0 <span class="small">(power 0)</span></td></tr><tr><td><strong>BUG-02</strong></td><td>Duplicate payment retry<div class="small">depends on: —</div></td><td>Heaven · Major Wins<div class="small">111</div></td><td>9</td><td>8</td><td>yes</td><td>0 <span class="small">(power 0)</span></td></tr><tr><td><strong>BUG-03</strong></td><td>Database contention<div class="small">depends on: —</div></td><td>Fire · Major Fixes<div class="small">101</div></td><td>9</td><td>3</td><td>yes</td><td>3 <span class="small">(power 22)</span></td></tr><tr><td><strong>BUG-04</strong></td><td>Misleading log message<div class="small">depends on: —</div></td><td>Lightning · Quick Fixes<div class="small">011</div></td><td>2</td><td>10</td><td>yes</td><td>0 <span class="small">(power 0)</span></td></tr><tr><td><strong>BUG-05</strong></td><td>Legacy export rewrite<div class="small">depends on: —</div></td><td>Air · Hollow Fixes<div class="small">001</div></td><td>3</td><td>3</td><td>yes</td><td>1 <span class="small">(power 2)</span></td></tr><tr><td><strong>BUG-06</strong></td><td>Payment idempotency<div class="small">depends on: BUG-03</div></td><td>Water · Locked Wins<div class="small">110</div></td><td>9</td><td>8</td><td>no</td><td>2 <span class="small">(power 13)</span></td></tr><tr><td><strong>BUG-07</strong></td><td>Cross-service data loss<div class="small">depends on: BUG-03, BUG-06</div></td><td>Mountain · Distant Peaks<div class="small">100</div></td><td>10</td><td>2</td><td>no</td><td>0 <span class="small">(power 0)</span></td></tr><tr><td><strong>BUG-08</strong></td><td>Normalize error labels<div class="small">depends on: BUG-06</div></td><td>Earth · Deferred Polish<div class="small">010</div></td><td>3</td><td>9</td><td>no</td><td>0 <span class="small">(power 0)</span></td></tr><tr><td><strong>BUG-09</strong></td><td>Obsolete report migration<div class="small">depends on: BUG-05</div></td><td>Swamp · Quagmires<div class="small">000</div></td><td>2</td><td>2</td><td>no</td><td>0 <span class="small">(power 0)</span></td></tr><tr><td><strong>BUG-10</strong></td><td>Session expiry bypass<div class="small">depends on: —</div></td><td>Heaven · Major Wins<div class="small">111</div></td><td>8</td><td>9</td><td>yes</td><td>0 <span class="small">(power 0)</span></td></tr></tbody>
+      <tbody id="issue-rows"></tbody>
     </table>
-    <p class="small" style="margin-top:12px;">This file uses the Plotly CDN, so it needs internet access when opened. The SVG file remains unchanged.</p>
+    <p class="small" style="margin-top:12px;">Data sources: <a href="data/issues.md">issues.md</a> and <a href="data/dependencies.md">dependencies.md</a>. Serve over HTTP or use GitHub Pages. Plotly requires Internet access. The SVG is a static snapshot.</p>
   </div></div>
 </div>
-<script>
-const issues = [{"id": "BUG-01", "title": "Missing auth check", "impact": 10, "ease": 9, "independent": 1, "depends": [], "unlockCount": 0, "unlockPower": 0, "bits": "111", "octant": "Major Wins", "element": "Heaven", "display": "Heaven", "color": "#EAF6FF", "edge": "#93C5FD", "markerSize": 9, "symbol": "circle"}, {"id": "BUG-02", "title": "Duplicate payment retry", "impact": 9, "ease": 8, "independent": 1, "depends": [], "unlockCount": 0, "unlockPower": 0, "bits": "111", "octant": "Major Wins", "element": "Heaven", "display": "Heaven", "color": "#EAF6FF", "edge": "#93C5FD", "markerSize": 9, "symbol": "circle"}, {"id": "BUG-03", "title": "Database contention", "impact": 9, "ease": 3, "independent": 1, "depends": [], "unlockCount": 3, "unlockPower": 22, "bits": "101", "octant": "Major Fixes", "element": "Fire", "display": "Fire", "color": "#DC2626", "edge": "#991B1B", "markerSize": 24.7, "symbol": "diamond"}, {"id": "BUG-04", "title": "Misleading log message", "impact": 2, "ease": 10, "independent": 1, "depends": [], "unlockCount": 0, "unlockPower": 0, "bits": "011", "octant": "Quick Fixes", "element": "Lightning", "display": "Lightning", "color": "#FFF200", "edge": "#D4B000", "markerSize": 9, "symbol": "circle"}, {"id": "BUG-05", "title": "Legacy export rewrite", "impact": 3, "ease": 3, "independent": 1, "depends": [], "unlockCount": 1, "unlockPower": 2, "bits": "001", "octant": "Hollow Fixes", "element": "Air", "display": "Air", "color": "#9CA3AF", "edge": "#6B7280", "markerSize": 17.7, "symbol": "diamond"}, {"id": "BUG-06", "title": "Payment idempotency", "impact": 9, "ease": 8, "independent": 0, "depends": ["BUG-03"], "unlockCount": 2, "unlockPower": 13, "bits": "110", "octant": "Locked Wins", "element": "Water", "display": "Water", "color": "#06B6D4", "edge": "#0E7490", "markerSize": 21.6, "symbol": "diamond"}, {"id": "BUG-07", "title": "Cross-service data loss", "impact": 10, "ease": 2, "independent": 0, "depends": ["BUG-03", "BUG-06"], "unlockCount": 0, "unlockPower": 0, "bits": "100", "octant": "Distant Peaks", "element": "Mountain", "display": "Mountain", "color": "#874018", "edge": "#663011", "markerSize": 9, "symbol": "circle"}, {"id": "BUG-08", "title": "Normalize error labels", "impact": 3, "ease": 9, "independent": 0, "depends": ["BUG-06"], "unlockCount": 0, "unlockPower": 0, "bits": "010", "octant": "Deferred Polish", "element": "Earth", "display": "Earth", "color": "#C26D1F", "edge": "#92400E", "markerSize": 9, "symbol": "circle"}, {"id": "BUG-09", "title": "Obsolete report migration", "impact": 2, "ease": 2, "independent": 0, "depends": ["BUG-05"], "unlockCount": 0, "unlockPower": 0, "bits": "000", "octant": "Quagmires", "element": "Swamp", "display": "Swamp", "color": "#567A37", "edge": "#3F5B2A", "markerSize": 9, "symbol": "circle"}, {"id": "BUG-10", "title": "Session expiry bypass", "impact": 8, "ease": 9, "independent": 1, "depends": [], "unlockCount": 0, "unlockPower": 0, "bits": "111", "octant": "Major Wins", "element": "Heaven", "display": "Heaven", "color": "#EAF6FF", "edge": "#93C5FD", "markerSize": 9, "symbol": "circle"}];
-const octants = {"111": {"element": "Heaven", "display": "Heaven", "name": "Major Wins", "color": "#EAF6FF", "edge": "#93C5FD", "desc": "High impact · easy · independent"}, "101": {"element": "Fire", "display": "Fire", "name": "Major Fixes", "color": "#DC2626", "edge": "#991B1B", "desc": "High impact · not easy · independent"}, "011": {"element": "Lightning", "display": "Lightning", "name": "Quick Fixes", "color": "#FFF200", "edge": "#D4B000", "desc": "Low impact · easy · independent"}, "001": {"element": "Air", "display": "Air", "name": "Hollow Fixes", "color": "#9CA3AF", "edge": "#6B7280", "desc": "Low impact · not easy · independent"}, "110": {"element": "Water", "display": "Water", "name": "Locked Wins", "color": "#06B6D4", "edge": "#0E7490", "desc": "High impact · easy · dependent"}, "100": {"element": "Mountain", "display": "Mountain", "name": "Distant Peaks", "color": "#874018", "edge": "#663011", "desc": "High impact · not easy · dependent"}, "010": {"element": "Earth", "display": "Earth", "name": "Deferred Polish", "color": "#C26D1F", "edge": "#92400E", "desc": "Low impact · easy · dependent"}, "000": {"element": "Swamp", "display": "Swamp", "name": "Quagmires", "color": "#567A37", "edge": "#3F5B2A", "desc": "Low impact · not easy · dependent"}};
-const groups = {};
-issues.forEach(i => { (groups[i.bits] ||= []).push(i); });
-
-function cuboidMesh(name, color, opacity, x0, x1, y0, y1, z0, z1) {
-  const x = [x0,x1,x1,x0,x0,x1,x1,x0];
-  const y = [y0,y0,y1,y1,y0,y0,y1,y1];
-  const z = [z0,z0,z0,z0,z1,z1,z1,z1];
-  const i = [0,0,4,4,0,0,1,1,2,2,3,3];
-  const j = [2,3,5,6,1,5,2,6,3,7,0,4];
-  const k = [1,2,6,7,5,4,6,5,7,6,4,7];
-  return { type:'mesh3d', name, x, y, z, i, j, k, color, opacity, hoverinfo:'skip', showscale:false, legendgroup:'volumes', showlegend:false };
-}
-function cuboidEdges(name, color, x0, x1, y0, y1, z0, z1) {
-  const pts = [
-    [[x0,y0,z0],[x1,y0,z0]], [[x1,y0,z0],[x1,y1,z0]], [[x1,y1,z0],[x0,y1,z0]], [[x0,y1,z0],[x0,y0,z0]],
-    [[x0,y0,z1],[x1,y0,z1]], [[x1,y0,z1],[x1,y1,z1]], [[x1,y1,z1],[x0,y1,z1]], [[x0,y1,z1],[x0,y0,z1]],
-    [[x0,y0,z0],[x0,y0,z1]], [[x1,y0,z0],[x1,y0,z1]], [[x1,y1,z0],[x1,y1,z1]], [[x0,y1,z0],[x0,y1,z1]],
-  ];
-  const x = [], y = [], z = [];
-  pts.forEach(seg => { x.push(seg[0][0], seg[1][0], null); y.push(seg[0][1], seg[1][1], null); z.push(seg[0][2], seg[1][2], null); });
-  return { type:'scatter3d', mode:'lines', name, x, y, z, hoverinfo:'skip', showlegend:false, legendgroup:'volumes', line:{color, width:7} };
-}
-const volumeDefs = Object.keys(octants).map(bits => [bits,
-  ...(bits[0] === '1' ? [5.5,10.5] : [0.5,5.5]),
-  ...(bits[1] === '1' ? [5.5,10.5] : [0.5,5.5]),
-  ...(bits[2] === '1' ? [0.5,1] : [0,0.5])
-]);
-const volumeTraces = [], edgeTraces = [];
-volumeDefs.forEach(([bits, x0, x1, y0, y1, z0, z1]) => {
-  const meta = octants[bits];
-  volumeTraces.push(cuboidMesh(`${meta.display} · ${meta.name} volume`, meta.color, 0.075, x0, x1, y0, y1, z0, z1));
-  edgeTraces.push(cuboidEdges(`${meta.display} · ${meta.name} edges`, meta.edge, x0, x1, y0, y1, z0, z1));
-});
-const pointTraces = Object.entries(octants).map(([bits, meta]) => {
-  const bucket = groups[bits] || [];
-  return {
-    type:'scatter3d', mode:'markers+text', name:`${meta.display} · ${meta.name}`,
-    x: bucket.map(i => i.impact), y: bucket.map(i => i.ease), z: bucket.map(i => i.independent),
-    text: bucket.map(i => i.id), textposition: 'top center',
-    marker: {
-      size: bucket.map(i => i.markerSize), color: bucket.map(i => i.color), symbol: bucket.map(i => i.symbol),
-      line: { color:'#111827', width:2.2 }, opacity: 0.98
-    },
-    customdata: bucket.map(i => [i.title, i.display, i.octant, i.bits, i.depends.join(', ') || '—', i.unlockCount, i.unlockPower, i.symbol === 'diamond' ? 'diamond = unlocks others' : 'circle = no downstream unlock']),
-    hovertemplate:
-      '<b>%{text}</b> · %{customdata[0]}<br>'+
-      'Octant: %{customdata[1]} · %{customdata[2]} (%{customdata[3]})<br>'+
-      'Impact: %{x}<br>Ease: %{y}<br>Independent: %{z}<br>'+
-      'Depends on: %{customdata[4]}<br>'+
-      'Unlocks: %{customdata[5]} issues · power %{customdata[6]}<br>'+
-      'Marker: %{customdata[7]}<extra></extra>',
-    showlegend:false
-  };
-});
-const thresholdTraces = [
-  {type:'surface', showscale:false, opacity:0.04, hoverinfo:'skip', showlegend:false, x:[[5.5,5.5],[5.5,5.5]], y:[[0.5,10.5],[0.5,10.5]], z:[[0,0],[1,1]], colorscale:[[0,'#94a3b8'],[1,'#94a3b8']]},
-  {type:'surface', showscale:false, opacity:0.04, hoverinfo:'skip', showlegend:false, x:[[0.5,10.5],[0.5,10.5]], y:[[5.5,5.5],[5.5,5.5]], z:[[0,0],[1,1]], colorscale:[[0,'#94a3b8'],[1,'#94a3b8']]},
-  {type:'surface', showscale:false, opacity:0.05, hoverinfo:'skip', showlegend:false, x:[[0.5,10.5],[0.5,10.5]], y:[[0.5,0.5],[10.5,10.5]], z:[[0.5,0.5],[0.5,0.5]], colorscale:[[0,'#cbd5e1'],[1,'#cbd5e1']]}
-];
-const allTraces = [...volumeTraces, ...edgeTraces, ...thresholdTraces, ...pointTraces];
-const volumeIndices = Array.from({length: volumeTraces.length + edgeTraces.length + thresholdTraces.length}, (_, idx) => idx);
-const visibleAll = Array(allTraces.length).fill(true);
-const visiblePointsOnly = allTraces.map((_, idx) => !volumeIndices.includes(idx));
-const layout = {
-  margin: {l:0,r:0,t:0,b:0}, paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
-  scene: {
-    xaxis: {title:'Impact', range:[0.5,10.5], tick0:1, dtick:1, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff'},
-    yaxis: {title:'Ease', range:[0.5,10.5], tick0:1, dtick:1, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff'},
-    zaxis: {title:'Independence', range:[0,1], tickvals:[0,1], ticktext:['Dependent','Independent'], gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff'},
-    camera: {eye: {x:1.55, y:1.5, z:0.95}}, aspectmode:'cube'
-  },
-  updatemenus: [{
-    type:'buttons', direction:'left', showactive:true, x:0.01, y:1.05, xanchor:'left', yanchor:'top',
-    buttons: [
-      {label:'Show octants', method:'update', args:[{visible: visibleAll}]},
-      {label:'Hide octants', method:'update', args:[{visible: visiblePointsOnly}]},
-      {label:'Reset view', method:'relayout', args:[{'scene.camera.eye': {x:1.55, y:1.5, z:0.95}}]}
-    ]
-  }]
-};
-Plotly.newPlot('plot', allTraces, layout, {responsive:true, displaylogo:false});
-</script>
+<script src="bagraph.js"></script>
 </body>
 </html>
