@@ -1,6 +1,8 @@
 # Bakai · 八解
 
-![Bakai octants](./bakai.svg)
+![Bakai category wheel](./bakai-wheel.svg)
+
+![Bakai category reference](./bakai-category-reference.svg)
 
 [Bagraph — interactive 3D visualization](./bagraph.html)
 
@@ -8,6 +10,19 @@
 - Impact
 - Ease
 - Independence
+
+## Category descriptions
+
+| IEI | Element | Category | Description |
+|---|---|---|---|
+| 111 | Heaven | Major Wins | High-value improvements that can be delivered quickly and independently. |
+| 101 | Fire | Major Fixes | High-impact issues that demand substantial effort but can be tackled immediately. |
+| 011 | Lightning | Quick Fixes | Minor improvements that can be delivered with little effort and no blockers. |
+| 001 | Air | Hollow Fixes | Effort-intensive work with limited direct value, unless it unlocks meaningful downstream improvements. |
+| 110 | Water | Locked Potential | High-value, low-effort opportunities waiting for their prerequisites to be resolved. |
+| 100 | Mountain | Distant Peaks | High-value challenges that require both substantial effort and the resolution of dependencies. |
+| 010 | Earth | Deferred Polish | Minor, inexpensive improvements that must wait until their blockers are resolved. |
+| 000 | Swamp | Costly Quagmires | Low-value, effort-intensive issues burdened by dependencies, rarely worth prioritizing. |
 
 ## Point semantics in the interactive chart
 - **Circle**: issue that does **not** unlock downstream issues.
@@ -29,7 +44,7 @@ The two sources of truth for the example dataset are [issues.md](./data/issues.m
 
 Unlocking Power is the sum of the Impact scores of all distinct reachable downstream issues, including indirect descendants. This is a potential benefit rather than a guarantee that completing one prerequisite will immediately unblock every descendant. The dependency graph must be acyclic.
 
-Bagraph computes these metrics and the octant from the Markdown data at page load. The issue table and point markers are generated from the same computed records. The static SVG illustrates the original dataset only.
+Bagraph computes these metrics and the octant from the Markdown data at page load. The issue table and point markers are generated from the same computed records. The two static SVGs illustrate the method and its category definitions, not a particular issue dataset.
 
 ## Containment Splitting
 
@@ -49,7 +64,7 @@ The goal is to unblock downstream work through a smaller, easier intervention. T
 **Candidates:** High Impact issues that have Low Ease or are Dependent.
 
 - **Fire (101) — Major Fixes**
-- **Water (110) — Locked Wins**
+- **Water (110) — Locked Potential**
 - **Mountain (100) — Distant Peaks**
 
 The goal is to mitigate harm while the definitive fix is difficult, time-consuming or blocked. Unlocking Power is not required. For example, temporarily disabling an affected production operation may reduce harm before the underlying defect can be fixed.
@@ -62,10 +77,10 @@ The goal is to mitigate harm while the definitive fix is difficult, time-consumi
 | 101 | Fire | Major Fixes | If Unlocking Power > 0 | Yes |
 | 011 | Lightning | Quick Fixes | — | — |
 | 001 | Air | Hollow Fixes | If Unlocking Power > 0 | — |
-| 110 | Water | Locked Wins | — | Yes |
+| 110 | Water | Locked Potential | — | Yes |
 | 100 | Mountain | Distant Peaks | — | Yes |
 | 010 | Earth | Deferred Polish | — | — |
-| 000 | Swamp | Quagmires | — | — |
+| 000 | Swamp | Costly Quagmires | — | — |
 
 Fire belongs naturally to both modalities. A single containment intervention may both mitigate harm and unblock downstream work. These are screening criteria, not mandatory splits or absolute exclusions.
 
