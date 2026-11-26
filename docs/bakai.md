@@ -15,14 +15,14 @@
 
 | IIE | Element | Category | Description |
 |---|---|---|---|
-| 111 | Heaven | Major Wins | High-value improvements that can be delivered quickly and independently. |
-| 110 | Fire | Major Fixes | High-impact issues that demand substantial effort but can be tackled immediately. |
-| 101 | Lightning | Quick Fixes | Minor improvements that can be delivered with little effort and no blockers. |
-| 100 | Air | Hollow Fixes | Effort-intensive work with limited direct value, unless it unlocks meaningful downstream improvements. |
-| 011 | Water | Locked Potential | High-value, low-effort opportunities waiting for their prerequisites to be resolved. |
-| 010 | Mountain | Distant Peaks | High-value challenges that require both substantial effort and the resolution of dependencies. |
-| 001 | Earth | Deferred Polish | Minor, inexpensive improvements that must wait until their blockers are resolved. |
-| 000 | Swamp | Costly Quagmires | Low-value, effort-intensive issues burdened by dependencies, rarely worth prioritizing. |
+| 111 | Heaven | Major Wins | High-value improvements that can be delivered quickly and independently. *Thou art blessed.* |
+| 110 | Fire | Major Fixes | High-impact issues that demand substantial effort but can be tackled immediately. *Fire must be extinguished.* |
+| 101 | Lightning | Quick Fixes | Minor improvements that can be delivered with little effort and no blockers. *Strike while you can.* |
+| 100 | Air | Hollow Fixes | Effort-intensive work with limited direct value, unless it unlocks meaningful downstream improvements. *Don't grasp at thin air.* |
+| 011 | Water | Stagnant Potential | High-value, low-effort opportunities waiting for their prerequisites to be resolved. *Water must flow.* |
+| 010 | Mountain | Distant Peaks | High-value challenges that require both substantial effort and the resolution of dependencies. *The summit awaits.* |
+| 001 | Earth | Deferred Polish | Minor, inexpensive improvements that must wait until their blockers are resolved. *Let the dust settle.* |
+| 000 | Swamp | Costly Quagmires | Low-value, effort-intensive issues burdened by dependencies, rarely worth prioritizing. *No one likes it here.* |
 
 ## Point semantics in the interactive chart
 - **Circle**: issue that does **not** unlock downstream issues.
@@ -64,7 +64,7 @@ The goal is to unblock downstream work through a smaller, easier intervention. T
 **Candidates:** High Impact issues that have Low Ease or are Dependent.
 
 - **Fire (110) — Major Fixes**
-- **Water (011) — Locked Potential**
+- **Water (011) — Stagnant Potential**
 - **Mountain (010) — Distant Peaks**
 
 The goal is to mitigate harm while the definitive fix is difficult, time-consuming or blocked. Unlocking Power is not required. For example, temporarily disabling an affected production operation may reduce harm before the underlying defect can be fixed.
@@ -77,7 +77,7 @@ The goal is to mitigate harm while the definitive fix is difficult, time-consumi
 | 110 | Fire | Major Fixes | If Unlocking Power > 0 | Yes |
 | 101 | Lightning | Quick Fixes | — | — |
 | 100 | Air | Hollow Fixes | If Unlocking Power > 0 | — |
-| 011 | Water | Locked Potential | — | Yes |
+| 011 | Water | Stagnant Potential | — | Yes |
 | 010 | Mountain | Distant Peaks | — | Yes |
 | 001 | Earth | Deferred Polish | — | — |
 | 000 | Swamp | Costly Quagmires | — | — |
