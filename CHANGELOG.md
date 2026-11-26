@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 — 2026-11-26
+
+- Replace the example-based SVG with two method illustrations: the category wheel and category reference.
+- Add descriptions of all eight categories.
+- Rename Water to Locked Potential and Swamp to Costly Quagmires across documentation and Bagraph.
+- Keep the dynamic issue dataset and graph calculations unchanged.
+
 ## 0.2.0 — 2026-11-25
 
 - Extract the ten example issues into `docs/data/issues.md` and dependencies into `docs/data/dependencies.md` using Mermaid.
