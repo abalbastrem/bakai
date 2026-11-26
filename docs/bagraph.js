@@ -201,9 +201,9 @@ const visiblePointsOnly = allTraces.map((_, idx) => !volumeIndices.includes(idx)
 const layout = {
   margin: {l:0,r:0,t:0,b:0}, paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
   scene: {
-    xaxis: {title:'Impact', range:[0.5,10.5], tick0:1, dtick:1, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff'},
-    yaxis: {title:'Ease', range:[0.5,10.5], tick0:1, dtick:1, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff'},
-    zaxis: {title:'Independence', range:[0,1], tickvals:[0,1], ticktext:['Dependent','Independent'], gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff'},
+    xaxis: {title:'Impact', range:[0.5,10.5], tick0:1, dtick:1, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff', showspikes:false, spikesides:false},
+    yaxis: {title:'Ease', range:[0.5,10.5], tick0:1, dtick:1, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff', showspikes:false, spikesides:false},
+    zaxis: {title:'Independence', range:[0,1], tickvals:[0,1], ticktext:['Dependent','Independent'], gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff', showspikes:false, spikesides:false},
     camera: {eye: {x:1.55, y:1.5, z:0.95}}, aspectmode:'cube'
   },
   updatemenus: [{
