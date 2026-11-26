@@ -14,7 +14,7 @@ const octants = {
     "display": "Lightning",
     "name": "Quick Fixes",
     "color": "#FFF200",
-    "edge": "#D4B000",
+    "edge": "#E8CB35",
     "desc": "Low impact · easy · independent"
   },
   "110": {
@@ -22,7 +22,7 @@ const octants = {
     "display": "Fire",
     "name": "Major Fixes",
     "color": "#DC2626",
-    "edge": "#991B1B",
+    "edge": "#E05252",
     "desc": "High impact · not easy · independent"
   },
   "111": {
@@ -232,7 +232,7 @@ function renderTrigram(bits) {
 }
 function renderTable(issues) {
   document.getElementById('issue-rows').innerHTML = [...issues].sort((a,b)=>b.bits.localeCompare(a.bits)).map(i =>
-    '<tr><td><strong>'+escapeHtml(i.id)+'</strong></td><td>'+escapeHtml(i.title)+'<div class="small">depends on: '+escapeHtml(i.depends.join(', ')||'—')+'</div></td><td>'+i.element+' · '+i.octant+'<div class="small" style="display:flex;align-items:center;gap:6px;margin-top:4px">'+renderTrigram(i.bits)+i.bits+'</div></td><td>'+i.impact+'</td><td>'+i.ease+'</td><td>'+(i.independent?'yes':'no')+'</td><td>'+i.unlockCount+' <span class="small">(power '+i.unlockPower+')</span></td></tr>'
+    '<tr><td><strong>'+escapeHtml(i.id)+'</strong></td><td>'+escapeHtml(i.title)+'<div class="small">depends on: '+escapeHtml(i.depends.join(', ')||'—')+'</div></td><td>'+i.element+' · '+i.octant+'<div class="small" style="display:flex;align-items:center;gap:6px;margin-top:4px">'+renderTrigram(i.bits)+i.bits+'</div></td><td>'+(i.independent?'yes':'no')+'</td><td>'+i.impact+'</td><td>'+i.ease+'</td><td>'+i.unlockCount+' <span class="small">(power '+i.unlockPower+')</span></td></tr>'
   ).join('');
 }
 async function fetchText(path) {
