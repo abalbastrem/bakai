@@ -4,9 +4,9 @@
 
 Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes the potential value of unblocking other work visible through Unlocking Power.
 
-![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/9a3dccfc98a9adc1fb21f57339e6c4c6d849744c/docs/bakai-octagon.svg)
+![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/6ef11ffd3915b10212c4ecf2551b9dfee4e41df7/docs/bakai-octagon.svg)
 
-![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/331270065ee7a08f1c81f9bacc37998c92e54eb9/docs/bakai-category-reference.svg)
+![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/b666f1ad9c3d9d978389d560c40a9d893f3d3000/docs/bakai-category-reference.svg)
 
 ## How it works
 
@@ -16,7 +16,7 @@ Bakai combines Impact, Ease and Independence to classify work into eight actiona
 | 110 | Fire | Major Fixes | `#DC2626` |
 | 101 | Lightning | Quick Fixes | `#FFF200` |
 | 100 | Air | Hollow Fixes | `#9CA3AF` |
-| 011 | Water | Locked Potential | `#06B6D4` |
+| 011 | Water | Stagnant Potential | `#06B6D4` |
 | 010 | Mountain | Distant Peaks | `#874018` |
 | 001 | Earth | Deferred Polish | `#C26D1F` |
 | 000 | Swamp | Costly Quagmires | `#567A37` |
