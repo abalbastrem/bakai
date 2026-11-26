@@ -200,9 +200,10 @@ const pointTraces = Object.entries(octants).sort(([a],[b])=>b.localeCompare(a)).
     showlegend:false
   };
 });
-const allTraces = [...volumeTraces, ...edgeTraces, ...pointTraces];
-const volumeIndices = Array.from({length: volumeTraces.length + edgeTraces.length}, (_, idx) => idx);
-const visibleAll = Array(allTraces.length).fill(true);
+fullEdges.forEach(trace=>{trace.visible=false;trace.line.width=4;});
+const allTraces = [...volumeTraces, ...edgeTraces, ...fullEdges, ...pointTraces];
+const volumeIndices = Array.from({length: volumeTraces.length + edgeTraces.length + fullEdges.length}, (_, idx) => idx);
+const visibleAll = allTraces.map((_,i)=>i<2*volumeTraces.length || i>=3*volumeTraces.length);
 const visiblePointsOnly = allTraces.map((_, idx) => !volumeIndices.includes(idx));
 const layout = {
   margin: {l:0,r:0,t:0,b:0}, paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
@@ -225,14 +226,14 @@ const plot = await Plotly.newPlot('plot', allTraces, layout, {responsive:true, d
 const keys = volumeDefs.map(v=>v[0]);
 const count = keys.length;
 const legend = [...document.querySelectorAll('#category-legend [data-octant]')];
-let selected = null, graphHover = null, legendHover = null, focused = null;
+let selected = null, graphHover = null, legendHover = null;
 let octantsVisible = true, rendered = '', queued = false, busy = false;
 function refreshHighlight() {
   if(queued) return;
   queued = true;
   requestAnimationFrame(async ()=>{
     queued = false;
-    const hovered = legendHover || focused || graphHover;
+    const hovered = legendHover || graphHover;
     const signature = JSON.stringify([selected,hovered,octantsVisible]);
     if(busy || signature===rendered) return;
     busy = true;
@@ -244,17 +245,17 @@ function refreshHighlight() {
     });
     try {
       const mode = bits=>bits===selected?'selected':bits===hovered?'hover':'idle';
-      await Plotly.restyle(plot,{opacity:keys.map(bits=>!octantsVisible?0:mode(bits)==='selected'?0.25:mode(bits)==='hover'?0.18:0.075)},keys.map((_,i)=>i));
-      const edges=keys.map((bits,i)=>octantsVisible && mode(bits)!=='idle'?fullEdges[i]:edgeTraces[i]);
+      const active=keys.map(bits=>octantsVisible && mode(bits)!=='idle');
+      // Toggle prebuilt traces rather than mutating the coordinate arrays of live traces.
       await Plotly.restyle(plot,{
-        x:edges.map(t=>t.x), y:edges.map(t=>t.y), z:edges.map(t=>t.z),
-        'line.width':keys.map(bits=>mode(bits)==='selected'?4:3)
-      },keys.map((_,i)=>count+i));
+        visible:[...keys.map(()=>octantsVisible),...keys.map((_,i)=>octantsVisible&&!active[i]),...active],
+        opacity:[...keys.map(bits=>mode(bits)==='selected'?0.25:mode(bits)==='hover'?0.18:0.075),...keys.map(()=>1),...keys.map(()=>1)]
+      },Array.from({length:3*count},(_,i)=>i));
     } catch(error) {
       console.error('Bagraph highlight:',error);
     } finally {
       busy=false;
-      const current=JSON.stringify([selected,legendHover || focused || graphHover,octantsVisible]);
+      const current=JSON.stringify([selected,legendHover || graphHover,octantsVisible]);
       if(current!==rendered) refreshHighlight();
     }
   });
@@ -266,7 +267,7 @@ function pick(bits) {
 function categoryAt(event) {
   const p=event?.points?.[0];
   if(!p || !Number.isInteger(p.curveNumber)) return null;
-  return p.curveNumber<2*count?keys[p.curveNumber%count]:null;
+  return keys[p.curveNumber%count] || null;
 }
 plot.on('plotly_hover',event=>{
   graphHover=octantsVisible?categoryAt(event):null;
@@ -289,8 +290,8 @@ legend.forEach(button=>{
   const bits=button.dataset.octant;
   button.addEventListener('pointerenter',()=>{legendHover=bits;refreshHighlight();});
   button.addEventListener('pointerleave',()=>{legendHover=null;refreshHighlight();});
-  button.addEventListener('focus',()=>{focused=bits;refreshHighlight();});
-  button.addEventListener('blur',()=>{focused=null;refreshHighlight();});
+  button.addEventListener('focus',()=>{if(button.matches(':focus-visible')){legendHover=bits;refreshHighlight();}});
+  button.addEventListener('blur',()=>{legendHover=null;refreshHighlight();});
   button.addEventListener('click',()=>pick(bits));
 });
 return plot;
