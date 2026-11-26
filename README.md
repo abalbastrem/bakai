@@ -4,7 +4,9 @@
 
 Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes the potential value of unblocking other work visible through Unlocking Power.
 
-![Bakai matrix with example issues](docs/bakai.svg)
+![Bakai category wheel](docs/bakai-wheel.svg)
+
+![Bakai category reference](docs/bakai-category-reference.svg)
 
 ## How it works
 
@@ -14,10 +16,10 @@ Bakai combines Impact, Ease and Independence to classify work into eight actiona
 | 101 | Fire | Major Fixes | `#DC2626` |
 | 011 | Lightning | Quick Fixes | `#FFF200` |
 | 001 | Air | Hollow Fixes | `#9CA3AF` |
-| 110 | Water | Locked Wins | `#06B6D4` |
+| 110 | Water | Locked Potential | `#06B6D4` |
 | 100 | Mountain | Distant Peaks | `#874018` |
 | 010 | Earth | Deferred Polish | `#C26D1F` |
-| 000 | Swamp | Quagmires | `#567A37` |
+| 000 | Swamp | Costly Quagmires | `#567A37` |
 
 Score Impact and Ease from 1 to 10 (6–10 is high). Independence is binary. Read the three bits in that order. Use the dependency graph to determine execution order rather than treating categories as a universal ranking.
 
@@ -48,6 +50,6 @@ Use one pipe-delimited row per issue (no literal pipes inside titles) and one `I
 
 For local use, run `python -m http.server 8000 --directory docs` from the repository root and visit `http://localhost:8000/bagraph.html`. Opening the HTML directly with `file://` will not work because it fetches Markdown over HTTP. Plotly is loaded from a CDN and requires internet access.
 
-The SVG is a static snapshot of the original fictional dataset; it is not regenerated automatically. Bagraph reads the current Markdown data dynamically.
+The two SVGs describe the method and its eight categories independently of any dataset. Bagraph reads the current Markdown issue and dependency data dynamically.
 
-The visualizations use fictional software issues. Bakai is a proposed practical framework inspired by eight-element symbolism, not a traditional Bagua system. This is an early version.
+The interactive Bagraph uses fictional software issues. Bakai is a proposed practical framework inspired by eight-element symbolism, not a traditional Bagua system. This is an early version.
