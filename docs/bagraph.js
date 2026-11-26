@@ -2,28 +2,28 @@
 
 const octants = {
   "100": {
-    "element": "Mountain",
-    "display": "Mountain",
-    "name": "Distant Peaks",
-    "color": "#874018",
-    "edge": "#663011",
-    "desc": "High impact · not easy · dependent"
+    "element": "Air",
+    "display": "Air",
+    "name": "Hollow Fixes",
+    "color": "#9CA3AF",
+    "edge": "#6B7280",
+    "desc": "Low impact · not easy · independent"
   },
   "101": {
+    "element": "Lightning",
+    "display": "Lightning",
+    "name": "Quick Fixes",
+    "color": "#FFF200",
+    "edge": "#D4B000",
+    "desc": "Low impact · easy · independent"
+  },
+  "110": {
     "element": "Fire",
     "display": "Fire",
     "name": "Major Fixes",
     "color": "#DC2626",
     "edge": "#991B1B",
     "desc": "High impact · not easy · independent"
-  },
-  "110": {
-    "element": "Water",
-    "display": "Water",
-    "name": "Locked Potential",
-    "color": "#06B6D4",
-    "edge": "#0E7490",
-    "desc": "High impact · easy · dependent"
   },
   "111": {
     "element": "Heaven",
@@ -33,23 +33,23 @@ const octants = {
     "edge": "#93C5FD",
     "desc": "High impact · easy · independent"
   },
+  "010": {
+    "element": "Mountain",
+    "display": "Mountain",
+    "name": "Distant Peaks",
+    "color": "#874018",
+    "edge": "#663011",
+    "desc": "High impact · not easy · dependent"
+  },
   "011": {
-    "element": "Lightning",
-    "display": "Lightning",
-    "name": "Quick Fixes",
-    "color": "#FFF200",
-    "edge": "#D4B000",
-    "desc": "Low impact · easy · independent"
+    "element": "Water",
+    "display": "Water",
+    "name": "Locked Potential",
+    "color": "#06B6D4",
+    "edge": "#0E7490",
+    "desc": "High impact · easy · dependent"
   },
   "001": {
-    "element": "Air",
-    "display": "Air",
-    "name": "Hollow Fixes",
-    "color": "#9CA3AF",
-    "edge": "#6B7280",
-    "desc": "Low impact · not easy · independent"
-  },
-  "010": {
     "element": "Earth",
     "display": "Earth",
     "name": "Deferred Polish",
@@ -118,7 +118,7 @@ function classifyIssues(raw, edges, categories) {
     const independent=Number(depends.length===0);
     const unlockCount=downstream.size;
     const unlockPower=[...downstream].reduce((sum,d)=>sum+nodes.get(d).impact,0);
-    const bits=`${Number(impact>=6)}${Number(ease>=6)}${independent}`;
+    const bits=`${independent}${Number(impact>=6)}${Number(ease>=6)}`;
     const meta=categories[bits];
     return {id,title,impact,ease,independent,depends,unlockCount,unlockPower,bits,octant:meta.name,element:meta.element,display:meta.display,color:meta.color,edge:meta.edge,markerSize:unlockCount?Math.round((17+Math.min(unlockPower,24)*.35)*10)/10:9,symbol:unlockCount?'diamond':'circle'};
   });
@@ -147,10 +147,10 @@ function cuboidEdges(name, color, x0, x1, y0, y1, z0, z1) {
   pts.forEach(seg => { x.push(seg[0][0], seg[1][0], null); y.push(seg[0][1], seg[1][1], null); z.push(seg[0][2], seg[1][2], null); });
   return { type:'scatter3d', mode:'lines', name, x, y, z, hoverinfo:'skip', showlegend:false, legendgroup:'volumes', line:{color, width:7} };
 }
-const volumeDefs = Object.keys(octants).map(bits => [bits,
-  ...(bits[0] === '1' ? [5.5,10.5] : [0.5,5.5]),
+const volumeDefs = Object.keys(octants).sort((a,b)=>b.localeCompare(a)).map(bits => [bits,
   ...(bits[1] === '1' ? [5.5,10.5] : [0.5,5.5]),
-  ...(bits[2] === '1' ? [0.5,1] : [0,0.5])
+  ...(bits[2] === '1' ? [5.5,10.5] : [0.5,5.5]),
+  ...(bits[0] === '1' ? [0.5,1] : [0,0.5])
 ]);
 const volumeTraces = [], edgeTraces = [];
 volumeDefs.forEach(([bits, x0, x1, y0, y1, z0, z1]) => {
@@ -158,7 +158,7 @@ volumeDefs.forEach(([bits, x0, x1, y0, y1, z0, z1]) => {
   volumeTraces.push(cuboidMesh(`${meta.display} · ${meta.name} volume`, meta.color, 0.075, x0, x1, y0, y1, z0, z1));
   edgeTraces.push(cuboidEdges(`${meta.display} · ${meta.name} edges`, meta.edge, x0, x1, y0, y1, z0, z1));
 });
-const pointTraces = Object.entries(octants).map(([bits, meta]) => {
+const pointTraces = Object.entries(octants).sort(([a],[b])=>b.localeCompare(a)).map(([bits, meta]) => {
   const bucket = groups[bits] || [];
   return {
     type:'scatter3d', mode:'markers+text', name:`${meta.display} · ${meta.name}`,
@@ -213,7 +213,7 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 function renderLegend() {
-  document.getElementById('category-legend').innerHTML = Object.entries(octants).map(([bits,meta]) =>
+  document.getElementById('category-legend').innerHTML = Object.entries(octants).sort(([a],[b])=>b.localeCompare(a)).map(([bits,meta]) =>
     '<div class="legend-item"><span class="swatch" style="background:'+meta.color+';border-color:'+meta.edge+'"></span><div><strong>'+meta.element+' · '+meta.name+'</strong> <span class="small">('+bits+')</span><br><span class="small">'+meta.desc+'</span></div></div>'
   ).join('');
 }
