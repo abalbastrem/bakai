@@ -144,8 +144,17 @@ function cuboidEdges(name, color, x0, x1, y0, y1, z0, z1) {
     [[x0,y0,z0],[x0,y0,z1]], [[x1,y0,z0],[x1,y0,z1]], [[x1,y1,z0],[x1,y1,z1]], [[x0,y1,z0],[x0,y1,z1]],
   ];
   const x = [], y = [], z = [];
-  pts.forEach(seg => { x.push(seg[0][0], seg[1][0], null); y.push(seg[0][1], seg[1][1], null); z.push(seg[0][2], seg[1][2], null); });
-  return { type:'scatter3d', mode:'lines', name, x, y, z, hoverinfo:'skip', showlegend:false, legendgroup:'volumes', line:{color, width:5} };
+  // Draw only the two end segments of each edge, leaving the middle open.
+  const fraction = 0.15;
+  const interpolate = (a,b,t) => a.map((v,i)=>v+(b[i]-v)*t);
+  const addSegment = (a,b) => {
+    x.push(a[0],b[0],null); y.push(a[1],b[1],null); z.push(a[2],b[2],null);
+  };
+  pts.forEach(([a,b]) => {
+    addSegment(a,interpolate(a,b,fraction));
+    addSegment(interpolate(a,b,1-fraction),b);
+  });
+  return { type:'scatter3d', mode:'lines', name, x, y, z, hoverinfo:'skip', showlegend:false, legendgroup:'volumes', line:{color, width:3} };
 }
 const volumeDefs = Object.keys(octants).sort((a,b)=>b.localeCompare(a)).map(bits => [bits,
   ...(bits[1] === '1' ? [5.5,10.5] : [0.5,5.5]),
@@ -157,7 +166,7 @@ volumeDefs.forEach(([bits, x0, x1, y0, y1, z0, z1]) => {
   const meta = octants[bits];
   // Inset only the displayed octants, not issue coordinates or classification.
   // Equal relative spacing on all axes (Independence has a 0–1 range).
-  const inset = 0.02;
+  const inset = 0.015;
   x0 += 10 * inset; x1 -= 10 * inset;
   y0 += 10 * inset; y1 -= 10 * inset;
   z0 += inset; z1 -= inset;
