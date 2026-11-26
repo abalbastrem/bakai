@@ -4,9 +4,9 @@
 
 Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes the potential value of unblocking other work visible through Unlocking Power.
 
-![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/715d14659e66697bca19615a7a4befabf9f95115/docs/bakai-octagon.svg)
+![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/58a890845c4f52eec42494bf5303b81f0baa7fed/docs/bakai-octagon.svg)
 
-![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/67ea385808ba22021063659ee3bb33ea51b329d2/docs/bakai-category-reference.svg)
+![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/78fd81f93fefed21341611a8fbe891f137cb50c7/docs/bakai-category-reference.svg)
 
 ## How it works
 
@@ -21,7 +21,7 @@ Bakai combines Impact, Ease and Independence to classify work into eight actiona
 | 001 | Earth | Deferred Polish | `#C26D1F` |
 | 000 | Swamp | Costly Quagmires | `#567A37` |
 
-Heaven uses a pale blue-white fill (`#EAF6FF`) and sky-blue outline (`#93C5FD`) across the SVGs and Bagraph.
+Heaven uses a pure white trigram fill (`#FFFFFF`), a pale blue-white category fill (`#EAF6FF`), and a shared sky-blue outline (`#93C5FD`).
 
 Score Impact and Ease from 1 to 10 (6–10 is high). Independence is binary. Read the three bits in Independence / Impact / Ease (IIE) order, from most to least significant. Use the dependency graph to determine execution order rather than treating categories as a universal ranking.
 
