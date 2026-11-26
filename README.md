@@ -4,24 +4,24 @@
 
 Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes the potential value of unblocking other work visible through Unlocking Power.
 
-![Bakai category wheel](docs/bakai-wheel.svg)
+![Bakai category octagon](docs/bakai-octagon.svg)
 
 ![Bakai category reference](docs/bakai-category-reference.svg)
 
 ## How it works
 
-| IEI | Element | Category | Color |
+| IIE | Element | Category | Color |
 |---|---|---|---|
 | 111 | Heaven | Major Wins | `#EAF6FF` |
-| 101 | Fire | Major Fixes | `#DC2626` |
-| 011 | Lightning | Quick Fixes | `#FFF200` |
-| 001 | Air | Hollow Fixes | `#9CA3AF` |
-| 110 | Water | Locked Potential | `#06B6D4` |
-| 100 | Mountain | Distant Peaks | `#874018` |
-| 010 | Earth | Deferred Polish | `#C26D1F` |
+| 110 | Fire | Major Fixes | `#DC2626` |
+| 101 | Lightning | Quick Fixes | `#FFF200` |
+| 100 | Air | Hollow Fixes | `#9CA3AF` |
+| 011 | Water | Locked Potential | `#06B6D4` |
+| 010 | Mountain | Distant Peaks | `#874018` |
+| 001 | Earth | Deferred Polish | `#C26D1F` |
 | 000 | Swamp | Costly Quagmires | `#567A37` |
 
-Score Impact and Ease from 1 to 10 (6–10 is high). Independence is binary. Read the three bits in that order. Use the dependency graph to determine execution order rather than treating categories as a universal ranking.
+Score Impact and Ease from 1 to 10 (6–10 is high). Independence is binary. Read the three bits in Independence / Impact / Ease (IIE) order, from most to least significant. Use the dependency graph to determine execution order rather than treating categories as a universal ranking.
 
 ## Containment Splitting
 
