@@ -249,9 +249,9 @@ function refreshHighlight() {
       // Toggle prebuilt traces rather than mutating the coordinate arrays of live traces.
       await Plotly.restyle(plot,{
         visible:[...keys.map(()=>octantsVisible),...keys.map((_,i)=>octantsVisible&&!active[i]),...active],
-        opacity:[...keys.map(bits=>mode(bits)==='selected'?0.25:mode(bits)==='hover'?0.18:0.075),...keys.map(()=>1),...keys.map(()=>1)]
+        opacity:[...keys.map(bits=>mode(bits)==='idle'?0.075:bits==='111'?(mode(bits)==='selected'?0.48:0.36):(mode(bits)==='selected'?0.25:0.18)),...keys.map(()=>1),...keys.map(()=>1)]
       },Array.from({length:3*count},(_,i)=>i));
-      await Plotly.restyle(plot,{color:keys.map((bits,i)=>bits==='111' && active[i]?'#BFDBFE':octants[bits].color)},keys.map((_,i)=>i));
+      await Plotly.restyle(plot,{color:keys.map((bits,i)=>bits==='111' && active[i]?'#60A5FA':octants[bits].color)},keys.map((_,i)=>i));
     } catch(error) {
       console.error('Bagraph highlight:',error);
     } finally {
