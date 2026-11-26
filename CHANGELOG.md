@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 — 2026-11-26
+
+- Adopt Independence / Impact / Ease (IIE) bit and trigram order, with codes descending from 111 to 000.
+- Replace the category wheel with the approved white octagon and update the category reference.
+- Synchronize Bagraph classifications, volume geometry, legend and documentation without changing the issue data or Unlocking Power.
+
 ## 0.3.0 — 2026-11-26
 
 - Replace the example-based SVG with two method illustrations: the category wheel and category reference.
