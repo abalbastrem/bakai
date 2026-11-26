@@ -194,13 +194,8 @@ const pointTraces = Object.entries(octants).sort(([a],[b])=>b.localeCompare(a)).
     showlegend:false
   };
 });
-const thresholdTraces = [
-  {type:'surface', showscale:false, opacity:0.04, hoverinfo:'skip', showlegend:false, x:[[5.5,5.5],[5.5,5.5]], y:[[0.5,10.5],[0.5,10.5]], z:[[0,0],[1,1]], colorscale:[[0,'#94a3b8'],[1,'#94a3b8']]},
-  {type:'surface', showscale:false, opacity:0.04, hoverinfo:'skip', showlegend:false, x:[[0.5,10.5],[0.5,10.5]], y:[[5.5,5.5],[5.5,5.5]], z:[[0,0],[1,1]], colorscale:[[0,'#94a3b8'],[1,'#94a3b8']]},
-  {type:'surface', showscale:false, opacity:0.05, hoverinfo:'skip', showlegend:false, x:[[0.5,10.5],[0.5,10.5]], y:[[0.5,0.5],[10.5,10.5]], z:[[0.5,0.5],[0.5,0.5]], colorscale:[[0,'#cbd5e1'],[1,'#cbd5e1']]}
-];
-const allTraces = [...volumeTraces, ...edgeTraces, ...thresholdTraces, ...pointTraces];
-const volumeIndices = Array.from({length: volumeTraces.length + edgeTraces.length + thresholdTraces.length}, (_, idx) => idx);
+const allTraces = [...volumeTraces, ...edgeTraces, ...pointTraces];
+const volumeIndices = Array.from({length: volumeTraces.length + edgeTraces.length}, (_, idx) => idx);
 const visibleAll = Array(allTraces.length).fill(true);
 const visiblePointsOnly = allTraces.map((_, idx) => !volumeIndices.includes(idx));
 const layout = {
