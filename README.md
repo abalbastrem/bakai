@@ -4,7 +4,7 @@
 
 Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes the potential value of unblocking other work visible through Unlocking Power.
 
-![Bakai category octagon](docs/bakai-octagon.svg)
+![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/bf0830bc842aa7f925515a518cc2285427840b47/docs/bakai-octagon.svg)
 
 ![Bakai category reference](docs/bakai-category-reference.svg)
 
