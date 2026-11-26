@@ -223,9 +223,16 @@ function renderLegend() {
     '<div class="legend-item"><span class="swatch" style="background:'+meta.color+';border-color:'+meta.edge+'"></span><div><strong>'+meta.element+' · '+meta.name+'</strong> <span class="small">('+bits+')</span><br><span class="small">'+meta.desc+'</span></div></div>'
   ).join('');
 }
+function renderTrigram(bits) {
+  const meta=octants[bits];
+  const fill=bits==='111'?'#FFFFFF':meta.color;
+  const bar=(x,y,w)=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="4" rx="1" fill="'+fill+'" stroke="'+meta.edge+'" stroke-width="0.9"/>';
+  const bars=bits.split('').map((bit,i)=>bit==='1'?bar(1,1+i*7,25):bar(1,1+i*7,10)+bar(16,1+i*7,10)).join('');
+  return '<svg width="27" height="20" viewBox="0 0 27 20" role="img" aria-label="Trigram '+bits+'" style="flex:none;vertical-align:middle">'+bars+'</svg>';
+}
 function renderTable(issues) {
-  document.getElementById('issue-rows').innerHTML = issues.map(i =>
-    '<tr><td><strong>'+escapeHtml(i.id)+'</strong></td><td>'+escapeHtml(i.title)+'<div class="small">depends on: '+escapeHtml(i.depends.join(', ')||'—')+'</div></td><td>'+i.element+' · '+i.octant+'<div class="small">'+i.bits+'</div></td><td>'+i.impact+'</td><td>'+i.ease+'</td><td>'+(i.independent?'yes':'no')+'</td><td>'+i.unlockCount+' <span class="small">(power '+i.unlockPower+')</span></td></tr>'
+  document.getElementById('issue-rows').innerHTML = [...issues].sort((a,b)=>b.bits.localeCompare(a.bits)).map(i =>
+    '<tr><td><strong>'+escapeHtml(i.id)+'</strong></td><td>'+escapeHtml(i.title)+'<div class="small">depends on: '+escapeHtml(i.depends.join(', ')||'—')+'</div></td><td>'+i.element+' · '+i.octant+'<div class="small" style="display:flex;align-items:center;gap:6px;margin-top:4px">'+renderTrigram(i.bits)+i.bits+'</div></td><td>'+i.impact+'</td><td>'+i.ease+'</td><td>'+(i.independent?'yes':'no')+'</td><td>'+i.unlockCount+' <span class="small">(power '+i.unlockPower+')</span></td></tr>'
   ).join('');
 }
 async function fetchText(path) {
