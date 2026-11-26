@@ -44,7 +44,7 @@ const octants = {
   "011": {
     "element": "Water",
     "display": "Water",
-    "name": "Locked Potential",
+    "name": "Stagnant Potential",
     "color": "#06B6D4",
     "edge": "#0E7490",
     "desc": "High impact · easy · dependent"
