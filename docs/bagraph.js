@@ -30,7 +30,7 @@ const octants = {
     "display": "Heaven",
     "name": "Major Wins",
     "color": "#EAF6FF",
-    "edge": "#93C5FD",
+    "edge": "#D9B76A",
     "desc": "High impact · easy · independent"
   },
   "010": {
