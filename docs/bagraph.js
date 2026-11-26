@@ -20,7 +20,7 @@ const octants = {
   "110": {
     "element": "Water",
     "display": "Water",
-    "name": "Locked Wins",
+    "name": "Locked Potential",
     "color": "#06B6D4",
     "edge": "#0E7490",
     "desc": "High impact · easy · dependent"
@@ -60,7 +60,7 @@ const octants = {
   "000": {
     "element": "Swamp",
     "display": "Swamp",
-    "name": "Quagmires",
+    "name": "Costly Quagmires",
     "color": "#567A37",
     "edge": "#3F5B2A",
     "desc": "Low impact · not easy · dependent"
