@@ -124,7 +124,7 @@ function classifyIssues(raw, edges, categories) {
   });
 }
 
-function renderPlot(issues) {
+async function renderPlot(issues) {
 const groups = {};
 issues.forEach(i => { (groups[i.bits] ||= []).push(i); });
 
@@ -137,7 +137,7 @@ function cuboidMesh(name, color, opacity, x0, x1, y0, y1, z0, z1) {
   const k = [1,2,6,7,5,4,6,5,7,6,4,7];
   return { type:'mesh3d', name, x, y, z, i, j, k, color, opacity, hoverinfo:'skip', showscale:false, legendgroup:'volumes', showlegend:false };
 }
-function cuboidEdges(name, color, x0, x1, y0, y1, z0, z1) {
+function cuboidEdges(name, color, x0, x1, y0, y1, z0, z1, full = false) {
   const pts = [
     [[x0,y0,z0],[x1,y0,z0]], [[x1,y0,z0],[x1,y1,z0]], [[x1,y1,z0],[x0,y1,z0]], [[x0,y1,z0],[x0,y0,z0]],
     [[x0,y0,z1],[x1,y0,z1]], [[x1,y0,z1],[x1,y1,z1]], [[x1,y1,z1],[x0,y1,z1]], [[x0,y1,z1],[x0,y0,z1]],
@@ -151,8 +151,11 @@ function cuboidEdges(name, color, x0, x1, y0, y1, z0, z1) {
     x.push(a[0],b[0],null); y.push(a[1],b[1],null); z.push(a[2],b[2],null);
   };
   pts.forEach(([a,b]) => {
-    addSegment(a,interpolate(a,b,fraction));
-    addSegment(interpolate(a,b,1-fraction),b);
+    if(full) addSegment(a,b);
+    else {
+      addSegment(a,interpolate(a,b,fraction));
+      addSegment(interpolate(a,b,1-fraction),b);
+    }
   });
   return { type:'scatter3d', mode:'lines', name, x, y, z, hoverinfo:'skip', showlegend:false, legendgroup:'volumes', line:{color, width:3} };
 }
@@ -161,7 +164,7 @@ const volumeDefs = Object.keys(octants).sort((a,b)=>b.localeCompare(a)).map(bits
   ...(bits[2] === '1' ? [5.5,10.5] : [0.5,5.5]),
   ...(bits[0] === '1' ? [0.5,1] : [0,0.5])
 ]);
-const volumeTraces = [], edgeTraces = [];
+const volumeTraces = [], edgeTraces = [], fullEdges = [];
 volumeDefs.forEach(([bits, x0, x1, y0, y1, z0, z1]) => {
   const meta = octants[bits];
   // Inset only the displayed octants, not issue coordinates or classification.
@@ -172,6 +175,9 @@ volumeDefs.forEach(([bits, x0, x1, y0, y1, z0, z1]) => {
   z0 += inset; z1 -= inset;
   volumeTraces.push(cuboidMesh(`${meta.display} · ${meta.name} volume`, meta.color, 0.075, x0, x1, y0, y1, z0, z1));
   edgeTraces.push(cuboidEdges(`${meta.display} · ${meta.name} edges`, meta.edge, x0, x1, y0, y1, z0, z1));
+  fullEdges.push(cuboidEdges(`${meta.display} · ${meta.name} edges`, meta.edge, x0, x1, y0, y1, z0, z1, true));
+  volumeTraces[volumeTraces.length-1].hoverinfo='none';
+  edgeTraces[edgeTraces.length-1].hoverinfo='none';
 });
 const pointTraces = Object.entries(octants).sort(([a],[b])=>b.localeCompare(a)).map(([bits, meta]) => {
   const bucket = groups[bits] || [];
@@ -215,7 +221,79 @@ const layout = {
     ]
   }]
 };
-return Plotly.newPlot('plot', allTraces, layout, {responsive:true, displaylogo:false});
+const plot = await Plotly.newPlot('plot', allTraces, layout, {responsive:true, displaylogo:false});
+const keys = volumeDefs.map(v=>v[0]);
+const count = keys.length;
+const legend = [...document.querySelectorAll('#category-legend [data-octant]')];
+let selected = null, graphHover = null, legendHover = null, focused = null;
+let octantsVisible = true, rendered = '', queued = false, busy = false;
+function refreshHighlight() {
+  if(queued) return;
+  queued = true;
+  requestAnimationFrame(async ()=>{
+    queued = false;
+    const hovered = legendHover || focused || graphHover;
+    const signature = JSON.stringify([selected,hovered,octantsVisible]);
+    if(busy || signature===rendered) return;
+    busy = true;
+    rendered = signature;
+    legend.forEach(button=>{
+      const bits=button.dataset.octant;
+      button.setAttribute('aria-pressed',String(bits===selected));
+      button.classList.toggle('is-highlighted',bits===hovered || bits===selected);
+    });
+    try {
+      const mode = bits=>bits===selected?'selected':bits===hovered?'hover':'idle';
+      await Plotly.restyle(plot,{opacity:keys.map(bits=>!octantsVisible?0:mode(bits)==='selected'?0.25:mode(bits)==='hover'?0.18:0.075)},keys.map((_,i)=>i));
+      const edges=keys.map((bits,i)=>octantsVisible && mode(bits)!=='idle'?fullEdges[i]:edgeTraces[i]);
+      await Plotly.restyle(plot,{
+        x:edges.map(t=>t.x), y:edges.map(t=>t.y), z:edges.map(t=>t.z),
+        'line.width':keys.map(bits=>mode(bits)==='selected'?4:3)
+      },keys.map((_,i)=>count+i));
+    } catch(error) {
+      console.error('Bagraph highlight:',error);
+    } finally {
+      busy=false;
+      const current=JSON.stringify([selected,legendHover || focused || graphHover,octantsVisible]);
+      if(current!==rendered) refreshHighlight();
+    }
+  });
+}
+function pick(bits) {
+  selected=selected===bits?null:bits;
+  refreshHighlight();
+}
+function categoryAt(event) {
+  const p=event?.points?.[0];
+  if(!p || !Number.isInteger(p.curveNumber)) return null;
+  return p.curveNumber<2*count?keys[p.curveNumber%count]:null;
+}
+plot.on('plotly_hover',event=>{
+  graphHover=octantsVisible?categoryAt(event):null;
+  refreshHighlight();
+});
+plot.on('plotly_unhover',()=>{graphHover=null;refreshHighlight();});
+plot.on('plotly_click',event=>{
+  const bits=octantsVisible?categoryAt(event):null;
+  if(bits) pick(bits);
+});
+plot.on('plotly_buttonclicked',event=>{
+  const label=event.button?.label;
+  if(label==='Hide octants' || label==='Show octants') {
+    octantsVisible=label==='Show octants';
+    if(!octantsVisible) {selected=null;graphHover=null;}
+    refreshHighlight();
+  }
+});
+legend.forEach(button=>{
+  const bits=button.dataset.octant;
+  button.addEventListener('pointerenter',()=>{legendHover=bits;refreshHighlight();});
+  button.addEventListener('pointerleave',()=>{legendHover=null;refreshHighlight();});
+  button.addEventListener('focus',()=>{focused=bits;refreshHighlight();});
+  button.addEventListener('blur',()=>{focused=null;refreshHighlight();});
+  button.addEventListener('click',()=>pick(bits));
+});
+return plot;
 
 }
 
@@ -224,7 +302,7 @@ function escapeHtml(value) {
 }
 function renderLegend() {
   document.getElementById('category-legend').innerHTML = Object.entries(octants).sort(([a],[b])=>b.localeCompare(a)).map(([bits,meta]) =>
-    '<div class="legend-item"><span class="swatch" style="background:'+meta.color+';border-color:'+meta.edge+'"></span><div><strong>'+meta.element+' · '+meta.name+'</strong> <span class="small">('+bits+')</span><br><span class="small">'+meta.desc+'</span></div></div>'
+    '<button type="button" class="legend-item category-button" data-octant="'+bits+'" aria-pressed="false"><span class="swatch" style="background:'+meta.color+';border-color:'+meta.edge+'"></span><div><strong>'+meta.element+' · '+meta.name+'</strong> <span class="small">('+bits+')</span><br><span class="small">'+meta.desc+'</span></div></button>'
   ).join('');
 }
 function renderTrigram(bits) {
