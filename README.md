@@ -6,7 +6,7 @@ Bakai combines Impact, Ease and Independence to classify work into eight actiona
 
 ![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/9a3dccfc98a9adc1fb21f57339e6c4c6d849744c/docs/bakai-octagon.svg)
 
-![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/5cb9c2f5287099242999bcff6d24a7b9348b6fee/docs/bakai-category-reference.svg)
+![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/331270065ee7a08f1c81f9bacc37998c92e54eb9/docs/bakai-category-reference.svg)
 
 ## How it works
 
