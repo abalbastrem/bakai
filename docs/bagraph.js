@@ -145,7 +145,7 @@ function cuboidEdges(name, color, x0, x1, y0, y1, z0, z1) {
   ];
   const x = [], y = [], z = [];
   pts.forEach(seg => { x.push(seg[0][0], seg[1][0], null); y.push(seg[0][1], seg[1][1], null); z.push(seg[0][2], seg[1][2], null); });
-  return { type:'scatter3d', mode:'lines', name, x, y, z, hoverinfo:'skip', showlegend:false, legendgroup:'volumes', line:{color, width:7} };
+  return { type:'scatter3d', mode:'lines', name, x, y, z, hoverinfo:'skip', showlegend:false, legendgroup:'volumes', line:{color, width:5} };
 }
 const volumeDefs = Object.keys(octants).sort((a,b)=>b.localeCompare(a)).map(bits => [bits,
   ...(bits[1] === '1' ? [5.5,10.5] : [0.5,5.5]),
@@ -155,6 +155,12 @@ const volumeDefs = Object.keys(octants).sort((a,b)=>b.localeCompare(a)).map(bits
 const volumeTraces = [], edgeTraces = [];
 volumeDefs.forEach(([bits, x0, x1, y0, y1, z0, z1]) => {
   const meta = octants[bits];
+  // Inset only the displayed octants, not issue coordinates or classification.
+  // Equal relative spacing on all axes (Independence has a 0–1 range).
+  const inset = 0.02;
+  x0 += 10 * inset; x1 -= 10 * inset;
+  y0 += 10 * inset; y1 -= 10 * inset;
+  z0 += inset; z1 -= inset;
   volumeTraces.push(cuboidMesh(`${meta.display} · ${meta.name} volume`, meta.color, 0.075, x0, x1, y0, y1, z0, z1));
   edgeTraces.push(cuboidEdges(`${meta.display} · ${meta.name} edges`, meta.edge, x0, x1, y0, y1, z0, z1));
 });
