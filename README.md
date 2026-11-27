@@ -4,9 +4,9 @@
 
 Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes the potential value of unblocking other work visible through Unlocking Power.
 
-![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/6ef11ffd3915b10212c4ecf2551b9dfee4e41df7/docs/bakai-octagon.svg)
+![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/ca0c5f5b3b56193fde3f897a49ea951889a2ca8a/docs/bakai-octagon.svg)
 
-![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/b666f1ad9c3d9d978389d560c40a9d893f3d3000/docs/bakai-category-reference.svg)
+![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/42b8109cbcb8f38103a59a5bfe8a806c8b0cbcff/docs/bakai-category-reference.svg)
 
 ## How it works
 
@@ -15,7 +15,7 @@ Bakai combines Impact, Ease and Independence to classify work into eight actiona
 | 111 | Heaven | Major Wins | `#EAF6FF` |
 | 110 | Fire | Major Fixes | `#DC2626` |
 | 101 | Lightning | Quick Fixes | `#FFF200` |
-| 100 | Air | Hollow Fixes | `#9CA3AF` |
+| 100 | Fog | Hidden Potential | `#9CA3AF` |
 | 011 | Water | Stagnant Potential | `#06B6D4` |
 | 010 | Mountain | Distant Peaks | `#874018` |
 | 001 | Earth | Deferred Polish | `#C26D1F` |
@@ -29,7 +29,7 @@ Score Impact and Ease from 1 to 10 (6–10 is high). Independence is binary. Rea
 
 Consider separating a rapid containment intervention from the definitive fix:
 
-- **Dependency-driven:** Fire and Air with positive Unlocking Power.
+- **Dependency-driven:** Fire and Fog with positive Unlocking Power.
 - **Impact-driven:** Fire, Water and Mountain.
 
 Reclassify both resulting issues and update their dependencies.
