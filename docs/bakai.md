@@ -18,7 +18,7 @@
 | 111 | Heaven | Major Wins | High-value improvements that can be delivered quickly and independently. *Thou art blessed.* |
 | 110 | Fire | Major Fixes | High-impact issues that demand substantial effort but can be tackled immediately. *Fire must be extinguished.* |
 | 101 | Lightning | Quick Fixes | Minor improvements that can be delivered with little effort and no blockers. *Strike while you can.* |
-| 100 | Fog | Hidden Potential | Effort-intensive work with limited direct value, unless it unlocks meaningful downstream improvements. *Fog may contain hidden gems.* |
+| 100 | Fog | Hidden Potential | Effort-intensive work with limited direct value, unless it unlocks meaningful downstream improvements. *May conceal hidden gems.* |
 | 011 | Water | Stagnant Potential | High-value, low-effort opportunities waiting for their prerequisites to be resolved. *Water must flow.* |
 | 010 | Mountain | Distant Peaks | High-value challenges that require both substantial effort and the resolution of dependencies. *The summit awaits.* |
 | 001 | Earth | Deferred Polish | Minor, inexpensive improvements that must wait until their blockers are resolved. *Let the dust settle.* |
