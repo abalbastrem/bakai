@@ -132,7 +132,7 @@ function classifyIssues(raw, edges, categories) {
     const unlockPower=[...downstream].reduce((sum,d)=>sum+nodes.get(d).impact,0);
     const bits=`${independent}${Number(impact>=6)}${Number(ease>=6)}`;
     const meta=categories[bits];
-    return {id,title,impact,ease,independent,depends,unlockCount,unlockPower,bits,octant:meta.name,element:meta.element,display:meta.display,color:meta.color,edge:meta.edge,markerSize:unlockCount?Math.round((17+Math.min(unlockPower,24)*.35)*10)/10:9,symbol:unlockCount?'diamond':'circle'};
+    return {id,title,impact,ease,independent,depends,unlockCount,unlockPower,bits,octant:meta.name,element:meta.element,display:meta.display,color:meta.color,edge:meta.edge,markerSize:unlockCount?Math.round((9+4*Math.sqrt(unlockPower))*10)/10:9,symbol:unlockCount?'diamond':'circle'};
   });
 }
 
