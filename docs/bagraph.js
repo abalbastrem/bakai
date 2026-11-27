@@ -67,6 +67,18 @@ const octants = {
   }
 };
 
+// Brighter orbs distinguish direct-value work without adding visual layers.
+const orbStyles = {
+  '111': {fill:'#FFFFFF', edge:'#60A5FA'},
+  '110': {fill:'#FF4545', edge:'#FF9A9A'},
+  '101': {fill:'#FFFF35', edge:'#C5A400'},
+  '100': {fill:'#C0CAD7', edge:'#78879B'},
+  '011': {fill:'#22DDF5', edge:'#0E93AE'},
+  '010': {fill:'#BC632E', edge:'#EAA873'},
+  '001': {fill:'#F69A39', edge:'#FFD095'},
+  '000': {fill:'#79B846', edge:'#C1E68B'}
+};
+
 function parseIssues(markdown) {
   const lines = markdown.split(/\r?\n/);
   const cells = line => line.trim().slice(1,-1).split('|').map(v=>v.trim());
@@ -186,10 +198,10 @@ const pointTraces = Object.entries(octants).sort(([a],[b])=>b.localeCompare(a)).
     x: bucket.map(i => i.impact), y: bucket.map(i => i.ease), z: bucket.map(i => i.independent),
     text: bucket.map(i => i.id), textposition: 'top center',
     marker: {
-      size: bucket.map(i => i.markerSize), color: bucket.map(i => i.color), symbol: bucket.map(i => i.symbol),
-      line: { color:'#111827', width:2.2 }, opacity: 0.98
+      size: bucket.map(i => i.markerSize), color: bucket.map(i => i.symbol==='circle'?orbStyles[i.bits].fill:i.color), symbol: bucket.map(i => i.symbol),
+      line: { color:bucket.map(i=>i.symbol==='circle'?orbStyles[i.bits].edge:'#111827'), width:2.2 }, opacity: 0.98
     },
-    customdata: bucket.map(i => [escapeHtml(i.title), i.display, i.octant, i.bits, i.depends.join(', ') || '—', i.unlockCount, i.unlockPower, i.symbol === 'diamond' ? 'diamond = unlocks others' : 'circle = no downstream unlock']),
+    customdata: bucket.map(i => [escapeHtml(i.title), i.display, i.octant, i.bits, i.depends.join(', ') || '—', i.unlockCount, i.unlockPower, i.symbol === 'diamond' ? 'Gem · unlocks downstream value' : 'Orb · no downstream unlock']),
     hovertemplate:
       '<b>%{text}</b> · %{customdata[0]}<br>'+
       'Octant: %{customdata[1]} · %{customdata[2]} (%{customdata[3]})<br>'+
