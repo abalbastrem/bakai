@@ -2,9 +2,9 @@
 
 const octants = {
   "100": {
-    "element": "Air",
-    "display": "Air",
-    "name": "Hollow Fixes",
+    "element": "Fog",
+    "display": "Fog",
+    "name": "Hidden Potential",
     "color": "#9CA3AF",
     "edge": "#6B7280",
     "desc": "Low impact · not easy · independent"
