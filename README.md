@@ -2,7 +2,7 @@
 
 **An eight-category prioritization matrix for issues and work.**
 
-Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes the potential value of unblocking other work visible through Unlocking Power.
+Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes downstream potential visible through Unlocking Power (gem size) and upstream prerequisite effort through Dependency Burden (depth), supporting structural diagnosis.
 
 ![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/ca0c5f5b3b56193fde3f897a49ea951889a2ca8a/docs/bakai-octagon.svg)
 
@@ -44,9 +44,9 @@ Reclassify both resulting issues and update their dependencies.
 
 - [Issues](docs/data/issues.md): edit the Markdown table (ID, Title, Impact, Ease).
 - [Dependencies](docs/data/dependencies.md): edit the Mermaid graph; an arrow points from prerequisite to dependent.
-- [Bagraph JavaScript](docs/bagraph.js): computes Independence, octant, downstream count and Unlocking Power, then renders the plot and issue table.
+- [Bagraph JavaScript](docs/bagraph.js): computes Independence, octant, downstream count, Unlocking Power and Dependency Burden, then renders the plot and issue table.
 
-Only unresolved issues and unresolved dependencies belong in this dataset. Do not duplicate derived values in the source files. Bagraph validates scores, unique IDs, graph references, duplicate edges and cycles. A shared downstream issue is counted once per ancestor. Unlocking Power measures potential downstream impact, not guaranteed immediate unblocking.
+Only unresolved issues and unresolved dependencies belong in this dataset. Do not duplicate derived values in the source files. Bagraph validates scores, unique IDs, graph references, duplicate edges and cycles. A shared downstream issue is counted once per ancestor. Unlocking Power measures potential downstream impact, not guaranteed immediate unblocking. Dependency Burden sums the costs (11 − Ease) of distinct unresolved direct and indirect prerequisites. Zero burden means independent; positive burden is displayed on a logarithmically graduated lower half of Bagraph. The binary IIE classification stays unchanged. Gems demand attention, not necessarily priority.
 
 Use one pipe-delimited row per issue (no literal pipes inside titles) and one `ID --> ID` edge per line in a single Mermaid graph block. Isolated issues need no graph entry. Reload Bagraph after changing the files.
 
