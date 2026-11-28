@@ -125,18 +125,50 @@ function classifyIssues(raw, edges, categories) {
     for(const child of nodes.get(id).children){out.add(child);for(const d of descendants(child))out.add(d);}
     active.delete(id);memo.set(id,out);return out;
   }
+  const upstreamMemo=new Map(), upstreamActive=new Set();
+  function ancestors(id) {
+    if(upstreamActive.has(id)) throw Error(`Circular dependency involving ${id}.`);
+    if(upstreamMemo.has(id)) return upstreamMemo.get(id);
+    upstreamActive.add(id);
+    const out=new Set();
+    for(const parent of nodes.get(id).depends) {
+      out.add(parent);
+      for(const ancestor of ancestors(parent)) out.add(ancestor);
+    }
+    upstreamActive.delete(id); upstreamMemo.set(id,out); return out;
+  }
   return raw.map(({id,title,impact,ease})=>{
     const {depends}=nodes.get(id); const downstream=descendants(id);
-    const independent=Number(depends.length===0);
+    const upstream=ancestors(id);
+    const blockerCount=upstream.size;
+    const dependencyBurden=[...upstream].reduce((sum,p)=>sum+11-nodes.get(p).ease,0);
+    const independent=Number(dependencyBurden===0);
     const unlockCount=downstream.size;
     const unlockPower=[...downstream].reduce((sum,d)=>sum+nodes.get(d).impact,0);
     const bits=`${independent}${Number(impact>=6)}${Number(ease>=6)}`;
     const meta=categories[bits];
-    return {id,title,impact,ease,independent,depends,unlockCount,unlockPower,bits,octant:meta.name,element:meta.element,display:meta.display,color:meta.color,edge:meta.edge,markerSize:unlockCount?Math.round((9+4*Math.sqrt(unlockPower))*10)/10:9,symbol:unlockCount?'diamond':'circle'};
+    return {id,title,impact,ease,independent,depends,blockerCount,dependencyBurden,unlockCount,unlockPower,bits,octant:meta.name,element:meta.element,display:meta.display,color:meta.color,edge:meta.edge,markerSize:unlockCount?Math.round((9+4*Math.sqrt(unlockPower))*10)/10:9,symbol:unlockCount?'diamond':'circle'};
   });
 }
 
+// Use a log-compressed dependent half, with a fixed independent surface.
+function burdenScale(issues) {
+  const maxBurden=Math.max(1,...issues.map(i=>i.dependencyBurden));
+  const maxTick=Math.max(10,Math.ceil(maxBurden/10)*10);
+  const z=b=>b===0?1:0.5*(1-Math.log1p(b)/Math.log1p(maxTick));
+  const candidates=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000].filter(b=>b<=maxTick);
+  const ticks=[...new Set([...candidates,maxTick])].sort((a,b)=>a-b);
+  // Avoid overlapping labels at the low end of the compressed scale.
+  const shown=[];
+  for(const b of ticks) if(!shown.length || Math.abs(z(b)-z(shown[shown.length-1]))>=0.065) shown.push(b);
+  if(shown[shown.length-1]!==maxTick) {
+    if(Math.abs(z(maxTick)-z(shown[shown.length-1]))<0.065) shown.pop();
+    shown.push(maxTick);
+  }
+  return {z,tickvals:[...shown.map(z),1],ticktext:[...shown.map(String),'0 · Ready']};
+}
 async function renderPlot(issues) {
+const scale=burdenScale(issues);
 const groups = {};
 issues.forEach(i => { (groups[i.bits] ||= []).push(i); });
 
@@ -195,17 +227,18 @@ const pointTraces = Object.entries(octants).sort(([a],[b])=>b.localeCompare(a)).
   const bucket = groups[bits] || [];
   return {
     type:'scatter3d', mode:'markers+text', name:`${meta.display} · ${meta.name}`,
-    x: bucket.map(i => i.impact), y: bucket.map(i => i.ease), z: bucket.map(i => i.independent),
+    x: bucket.map(i => i.impact), y: bucket.map(i => i.ease), z: bucket.map(i => scale.z(i.dependencyBurden)),
     text: bucket.map(i => i.id), textposition: 'top center',
     marker: {
       size: bucket.map(i => i.markerSize), color: bucket.map(i => i.symbol==='circle'?orbStyles[i.bits].fill:i.color), symbol: bucket.map(i => i.symbol),
       line: { color:bucket.map(i=>i.symbol==='circle'?orbStyles[i.bits].edge:'#111827'), width:2.2 }, opacity: 0.98
     },
-    customdata: bucket.map(i => [escapeHtml(i.title), i.display, i.octant, i.bits, i.depends.join(', ') || '—', i.unlockCount, i.unlockPower, i.symbol === 'diamond' ? 'Gem · unlocks downstream value' : 'Orb · no downstream unlock']),
+    customdata: bucket.map(i => [escapeHtml(i.title), i.display, i.octant, i.bits, i.depends.join(', ') || '—', i.unlockCount, i.unlockPower, i.symbol === 'diamond' ? 'Gem · unlocks downstream value' : 'Orb · no downstream unlock',i.independent?'Yes':'No',i.dependencyBurden,i.blockerCount]),
     hovertemplate:
       '<b>%{text}</b> · %{customdata[0]}<br>'+
       'Octant: %{customdata[1]} · %{customdata[2]} (%{customdata[3]})<br>'+
-      'Impact: %{x}<br>Ease: %{y}<br>Independent: %{z}<br>'+
+      'Impact: %{x}<br>Ease: %{y}<br>Independent: %{customdata[8]}<br>'+
+      'Dependency Burden: %{customdata[9]} · %{customdata[10]} total blockers<br>'+
       'Depends on: %{customdata[4]}<br>'+
       'Unlocks: %{customdata[5]} issues · power %{customdata[6]}<br>'+
       'Marker: %{customdata[7]}<extra></extra>',
@@ -222,7 +255,7 @@ const layout = {
   scene: {
     xaxis: {title:'Impact', range:[0.5,10.5], tick0:1, dtick:1, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff', showspikes:false, spikesides:false},
     yaxis: {title:'Ease', range:[0.5,10.5], tick0:1, dtick:1, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff', showspikes:false, spikesides:false},
-    zaxis: {title:'Independence', range:[0,1], tickvals:[0,1], ticktext:['Dependent','Independent'], gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff', showspikes:false, spikesides:false},
+    zaxis: {title:'Independence / Dependency Burden', range:[0,1], tickmode:'array', tickvals:scale.tickvals, ticktext:scale.ticktext, gridcolor:'#e2e8f0', zeroline:false, backgroundcolor:'#ffffff', showspikes:false, spikesides:false},
     camera: {eye: {x:1.55, y:1.5, z:0.95}}, aspectmode:'cube'
   },
   updatemenus: [{
@@ -328,7 +361,7 @@ function renderTrigram(bits) {
 }
 function renderTable(issues) {
   document.getElementById('issue-rows').innerHTML = [...issues].sort((a,b)=>b.bits.localeCompare(a.bits)).map(i =>
-    '<tr><td><strong>'+escapeHtml(i.id)+'</strong></td><td>'+escapeHtml(i.title)+'<div class="small">depends on: '+escapeHtml(i.depends.join(', ')||'—')+'</div></td><td>'+i.element+' · '+i.octant+'<div class="small" style="display:flex;align-items:center;gap:6px;margin-top:4px">'+renderTrigram(i.bits)+i.bits+'</div></td><td>'+(i.independent?'yes':'no')+'</td><td>'+i.impact+'</td><td>'+i.ease+'</td><td>'+i.unlockCount+' <span class="small">(power '+i.unlockPower+')</span></td></tr>'
+    '<tr><td><strong>'+escapeHtml(i.id)+'</strong></td><td>'+escapeHtml(i.title)+'<div class="small">depends on: '+escapeHtml(i.depends.join(', ')||'—')+'</div></td><td>'+i.element+' · '+i.octant+'<div class="small" style="display:flex;align-items:center;gap:6px;margin-top:4px">'+renderTrigram(i.bits)+i.bits+'</div></td><td>'+(i.independent?'yes':'no')+'<div class="small">Burden: '+i.dependencyBurden+' · blockers: '+i.blockerCount+'</div></td><td>'+i.impact+'</td><td>'+i.ease+'</td><td>'+i.unlockCount+' <span class="small">(power '+i.unlockPower+')</span></td></tr>'
   ).join('');
 }
 async function fetchText(path) {
@@ -352,4 +385,4 @@ async function main() {
   }
 }
 if(typeof document!=='undefined') main();
-if(typeof module!=='undefined') module.exports={parseIssues,parseDependencies,classifyIssues,octants};
+if(typeof module!=='undefined') module.exports={parseIssues,parseDependencies,classifyIssues,octants,burdenScale};
