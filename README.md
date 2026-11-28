@@ -4,9 +4,9 @@
 
 Bakai combines Impact, Ease and Independence to classify work into eight actionable categories. It also makes downstream potential visible through Unlocking Power (gem size) and upstream prerequisite effort through Dependency Burden (depth), supporting structural diagnosis.
 
-![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/ca0c5f5b3b56193fde3f897a49ea951889a2ca8a/docs/bakai-octagon.svg)
+![Bakai category octagon](https://raw.githubusercontent.com/abalbastrem/bakai/a68405ace24152a008ce28b773f29082b3fad9ab/docs/bakai-octagon.svg)
 
-![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/dd7c0be9a61ea568ec88a206b3079f9a9cb0750c/docs/bakai-category-reference.svg)
+![Bakai category reference](https://raw.githubusercontent.com/abalbastrem/bakai/4497d12d2dbd3f6f5c83818291ea029b3fd8090d/docs/bakai-category-reference.svg)
 
 ## How it works
 
