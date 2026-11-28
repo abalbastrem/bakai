@@ -62,7 +62,7 @@ const octants = {
     "display": "Swamp",
     "name": "Costly Quagmires",
     "color": "#567A37",
-    "edge": "#3F5B2A",
+    "edge": "#7E22CE",
     "desc": "Low impact · not easy · dependent"
   }
 };
