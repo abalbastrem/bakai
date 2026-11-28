@@ -25,9 +25,9 @@
 | 000 | Swamp | Costly Quagmires | Low-value, effort-intensive issues burdened by dependencies, rarely worth prioritizing. *No one likes it here.* |
 
 ## Point semantics in the interactive chart
-- **Circle**: issue that does **not** unlock downstream issues.
-- **Diamond**: issue that **does** unlock downstream issues.
-- **Marker size**: increases with **Unlocking Power**, with a capped display size in Bagraph.
+- **Orb (circle)**: issue with no downstream issues to unlock; fixed marker size.
+- **Gem (diamond)**: issue that unlocks downstream work; marker size grows as `9 + 4 × sqrt(Unlocking Power)`, without a fixed cap.
+- Gems demand attention, not necessarily priority. Orbs can deliver substantial direct value.
 
 ## Notes
 - Bit order and trigram order: top = Independence, middle = Impact, bottom = Ease.
@@ -43,6 +43,16 @@
 The two sources of truth for the example dataset are [issues.md](./data/issues.md) and [dependencies.md](./data/dependencies.md). Issues specify Impact and Ease on the integer scale 1–10. The Mermaid graph uses arrows from unresolved prerequisites to their dependents. Independence is derived from the absence of incoming edges.
 
 Unlocking Power is the sum of the Impact scores of all distinct reachable downstream issues, including indirect descendants. This is a potential benefit rather than a guarantee that completing one prerequisite will immediately unblock every descendant. The dependency graph must be acyclic.
+
+### Dependency Burden
+
+Dependency Burden B(i) is the sum of Cost(j) = 11 − Ease(j) for every distinct unresolved ancestor j of issue i, including direct and indirect prerequisites. Shared ancestors count once per issue. B = 0 means Independent; B > 0 means Dependent. The eight IIE categories remain unchanged.
+
+Bagraph places independent issues at z = 1 and dependent issues in the lower half, using z = 0.5 × (1 − ln(1+B)/ln(1+M)), where M is the maximum burden rounded up to a multiple of ten (minimum 10). Axis labels show actual burden values. The scale adapts to the dataset, so absolute vertical positions should not be compared across snapshots without accounting for M. Burden estimates cumulative prerequisite cost, not elapsed time or critical-path duration. Both summed metrics assume comparable, additive scores; they are relative estimates, not measured hours or monetary value.
+
+### Structural diagnosis
+
+Bakai supports classification, prioritization and structural diagnosis. Gem size represents downstream potential; depth represents the upstream barrier. Large deep gems warrant investigation for excessive coupling, long prerequisite chains, cross-team bottlenecks or poor work decomposition. These are signals, not proof of architectural defects. Removing dependencies or splitting work can make value more accessible; a large gem does not automatically outrank a high-impact orb. Recompute both metrics after changes to the graph.
 
 Bagraph computes these metrics and the octant from the Markdown data at page load. The issue table and point markers are generated from the same computed records. The two static SVGs illustrate the method and its category definitions, not a particular issue dataset.
 
@@ -89,7 +99,7 @@ Fire belongs naturally to both modalities. A single containment intervention may
 1. Identify a viable containment intervention and a definitive root cause fix.
 2. Score each resulting issue independently on Impact, Ease and Independence. A rapid, independent containment intervention may move to Heaven or Lightning, depending on its own Impact.
 3. Update dependency links to reflect which intervention actually satisfies each prerequisite. Retain dependencies on the root cause fix where containment is insufficient.
-4. Recalculate Unlocking Power across the affected dependency graph, avoiding double-counting shared downstream issues.
+4. Recalculate Unlocking Power and Dependency Burden across the affected dependency graph, counting shared descendants and ancestors only once per issue.
 5. Compare the benefit of earlier containment or unblocking against the additional effort and risk of maintaining a temporary solution. If splitting offers no meaningful benefit, retain the original issue.
 
 Classification informs prioritization; actual execution order must respect unresolved prerequisites.
